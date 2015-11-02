@@ -1,0 +1,424 @@
+<!doctype html>
+<html lang="en">
+
+	<head>
+		<meta charset="utf-8">
+
+		<title>Security Technologies in JBoss Middleware</title>
+
+		<meta name="description" content="Introduction to WildFly, Elytron and Keycloak">
+		<meta name="author" content="Peter Škopek">
+
+		<meta name="apple-mobile-web-app-capable" content="yes" />
+		<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
+
+		<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, minimal-ui">
+
+		<link rel="stylesheet" href="css/reveal.css">
+		<link rel="stylesheet" href="css/theme/night.css" id="theme">
+
+		<!-- Code syntax highlighting -->
+		<link rel="stylesheet" href="lib/css/zenburn.css">
+
+		<!-- Printing and PDF exports -->
+		<script>
+			var link = document.createElement( 'link' );
+			link.rel = 'stylesheet';
+			link.type = 'text/css';
+			link.href = window.location.search.match( /print-pdf/gi ) ? 'css/print/pdf.css' : 'css/print/paper.css';
+			document.getElementsByTagName( 'head' )[0].appendChild( link );
+		</script>
+
+		<!--[if lt IE 9]>
+		<script src="lib/js/html5shiv.js"></script>
+		<![endif]-->
+	</head>
+
+	<body>
+
+		<div class="reveal">
+
+			<div class="slides">
+				<section>
+					<h2>Security Technologies in JBoss Middleware</h2>
+                    <br/>
+					<h3>Introduction to WildFly, Elytron and Keycloak</h3>
+					<p>
+						<small>Author: Peter Škopek / JBoss by Red Hat / <a href="http://twitter.com/pskopek">@pskopek</a></small>
+					</p>
+				</section>
+
+                <section>
+                    <section>
+                        <h2>What is WildFly?</h2>
+                        <p>It is very flexible, lightweight, managed application runtime.</p>
+                        <p>It is extremely developer friendly with lot's of examples (quick starts).</p>
+                    </section>
+
+                    <section>
+                        <h2>Highlights - ops</h2>
+                        <ul>
+                            <li class="fragment">Fast Startup</li>
+                            <li class="fragment">Ultimate Web Performance & Scalability</li>
+                            <li class="fragment">Exceptionally Lightweight</li>
+                            <li class="fragment">Customizable Runtime</li>
+                            <li class="fragment">Unified configuration & Management</li>
+                            <li class="fragment">Domain & Standalone Management</li>
+                        </ul>
+                    </section>
+                    <section>
+                        <h2>Highlights - devs</h2>
+                        <ul>
+                            <li class="fragment">Java EE 7</li>
+                            <li class="fragment">Modern Web</li>
+                            <li class="fragment">Modular Java</li>
+                            <li class="fragment">Fast Linking & Concurrent Loading</li>
+                            <li class="fragment">Easily Testable / Arquillian</li>
+                        </ul>
+                    </section>
+                    <section>
+                        <h3>Based on the Best of Open Source</h3>
+                            <ul class="fragment fade-in">
+                                <li>Hibernate</li>
+                                <li>Narayana</li>
+                                <li>Infinispan</li>
+                                <li>IronJacamar</li>
+                                <li>RESTEasy</li>
+                                <li>Weld</li>
+                                <li>HornetQ</li>
+                                <li>JGroups</li>
+                                <li>Apache CXF</li>
+                                <li>Arquillian</li>
+                                <li>...</li>
+                            </ul>
+                    </section>
+                    <section>
+                        <h2>Try it</h2>
+                            <p>Download WildFly at <a href="http://wildfly.org/downloads/">http://wildfly.org/downloads/</a></p>
+                            <p>OpenShift Cartridge: <a href="https://developers.openshift.com/en/wildfly-getting-started.html">https://developers.openshift.com/en/wildfly-getting-started.html</a></p>
+                            <p>Documentation: <a href="https://docs.jboss.org/author/display/WFLY9/Documentation">https://docs.jboss.org/author/display/WFLY9/Documentation</a></p>
+							<p>Issues: <a href="https://issues.jboss.org/browse/WFLY">https://issues.jboss.org/browse/WFLY</a></p>
+                    </section>
+                </section>
+
+                <section>
+					<section>
+                    <h2>Elytron</h2>
+						<p>WildFly Elytron is a new WildFly sub-project which is completely replacing the combination of
+							PicketBox and JAAS as the WildFly client and server security mechanism.</p>
+					</section>
+					<section>
+						<h3>What does the word "elytron" mean?</h3>
+						<small>An "elytron" (ĕl´·ĭ·trŏn, plural "elytra") is the hard, protective casing over a wing of certain flying insects <br>(e.g. beetles).</small>
+						<img border="0" alt="elytron" title="elytron" src="elytron.jpg" rel="nofollow"/>
+					</section>
+					<section>
+						<h2>WildFly Elytron Project</h2>
+						<p>GitHub Repository: <a href="https://github.com/wildfly-security/wildfly-elytron">https://github.com/wildfly-security/wildfly-elytron</a> </p>
+						<p>Issues: <a href="https://issues.jboss.org/projects/ELY">https://issues.jboss.org/projects/ELY</a></p>
+						<p>Elytron Subsystem Repository: <a href="https://github.com/wildfly-security/elytron-subsystem">https://github.com/wildfly-security/elytron-subsystem</a></p>
+						<p style="text-align: left;">OpenShift: <pre><code class="bash" data-trim>
+rhc app create &lt;APP_NAME&gt;
+   https://raw.githubusercontent.com/openshift-cartridges/openshift-wildfly-cartridge/elytron_integration/metadata/manifest.yml
+						</code></pre></p>
+					</section>
+					<section>
+						<h2>WildFly Elytron: Pieces</h2>
+						<h3>Authentication Client</h3>
+						<ul>
+							<li>XML based configuration</li>
+							<li>API for direct control</li>
+						</ul>
+					</section>
+					<section>
+						<h2>WildFly Elytron: Pieces</h2>
+						<h3>PasswordFactory API/SPI</h3>
+						<ul>
+							<li>Implementation of numerous password types</li>
+							<li>Various hashed / salted representation</li>
+							<li>Mechanism specific representations e.g. Digest/SCRAM/OTP</li>
+							<li>Some level of transformation</li>
+						</ul>
+					</section>
+					<section>
+						<h2>WildFly Elytron: Pieces</h2>
+						<h3>Security Realms</h3>
+						<ul>
+							<li>Integration point with account store</li>
+							<li>Two modes of operation</li>
+							<ul>
+								<li>Credential Acquisition</li>
+								<li>Evidence Validation</li>
+							</ul>
+							<li>Returns AuthorizationIdentity</li>
+							<li>Also have modifiable realm API/SPI</li>
+						</ul>
+					</section>
+					<section>
+						<h2>WildFly Elytron: Pieces</h2>
+						<h3>Security Realm Implementations</h3>
+						<br/>
+						<ul>
+							<li>Legacy properties file</li>
+							<li>JDBC</li>
+							<li>LDAP</li>
+							<li>File based</li>
+						</ul>
+					</section>
+					<section>
+						<h2>WildFly Elytron: Pieces</h2>
+						<h3>Security Domain</h3>
+						<ul>
+							<li>Authentication Starts Against This</li>
+							<li>Aggregation of security realms</li>
+							<ul>
+								<li>Associated NameRewriter and RealmMapper</li>
+							</ul>
+							<li>Returns SecurityIdentity</li>
+							<ul>
+								<li>getRoles based on RoleMapper</li>
+								<li>getPermissions based on PermissionMapper</li>
+							</ul>
+							</ul>
+					</section>
+					<section>
+						<h2>WildFly Elytron: Pieces</h2>
+						<h3>SASL Mechanisms (Based on JBoss SASL)</h3>
+						<ul>
+							<li>Digest</li>
+							<li>IEC-9798-3</li>
+							<li>External</li>
+							<li>GS2</li>
+							<li>GSSAPI</li>
+							<li>Local</li>
+							<li>Plain</li>
+							<li>Scram</li>
+							<li>OTP</li>
+						</ul>
+					</section>
+					<section>
+						<h2>WildFly Elytron: Pieces</h2>
+						<h3>SecurityDomainSaslConfiguration</h3>
+						<ul>
+							<li>Combines security domains with SASL mechanisms</li>
+							<li>Mechanism selection based on policy and available credential handling</li>
+						</ul>
+					</section>
+					<section>
+						<h2>WildFly Elytron: Pieces</h2>
+						<h3>HTTP Authentication Framework</h3>
+						<ul>
+							<li>SASL pattern for HTTP</li>
+							<li>Adding mechanisms, sharing with SASL where possible	SecurityDomainHttpConfiguration</li>
+						</ul>
+					</section>
+					<section>
+						<h2>WildFly Elytron: Pieces</h2>
+						<ul>
+							<li>JACC Implementation</li>
+							<li>WildFly Security Manager</li>
+							<li>Replacement PicketBox Vault Implementation</li>
+							<li>SSL Utilities</li>
+						</ul>
+					</section>
+					<section>
+						<h2>WildFly Elytron Subsystem</h2>
+						<ul>
+							<li>Plan to merge to WildFly Core</li>
+							<li>Component assembly approach</li>
+							<li>Entirely capabilities and requirements based</li>
+						</ul>
+					</section>
+                </section>
+
+				<section>
+                    <section>
+                        <h2>Keycloak</h2>
+						<ul>
+							<li>Out of the Box Security Server</li>
+							<ul>
+								<li>extensive and usable management UI</li>
+							</ul>
+							<li>Modern standards</li>
+							<ul>
+								<li>OAuth2, OpenID Connect, SAML2</li>
+							</ul>
+							<li>Modern use cases</li>
+							<ul>
+								<li>REST endpoint security, Mobile, IoT, Cloud…</li>
+							</ul>
+							<li>Value features</li>
+							<ul>
+								<li>Identity Brokering, Social Brokering, User Federation, Adapters</li>
+							</ul>
+						</ul>
+                    </section>
+					<section>
+						<h2>Keycloak Overview</h2>
+						<img src="kc-overview.png" border="0" alt="keycloak overview" title="keycloak" rel="nofollow"/>
+					</section>
+					<section>
+						<h2>Protocols</h2>
+						<ul>
+							<li>OpenID Connect</li>
+							<li>SAML 2.0</li>
+						</ul>
+					</section>
+					<section>
+						<h2>Authentication</h2>
+						<ul>
+							<li>Authenticate with Keycloak Realm</li>
+							<li>Login forms provided by Keycloak</li>
+							<li>Two-factor authentication</li>
+							<li>Requires SSL</li>
+							<li>Passwords are salted and hashed with PBKDF2</li>
+							<li>Iterations configurable</li>
+
+						</ul>
+					</section>
+					<section>
+						<h2>As simple as this</h2>
+						<pre><code class="html" data-trim>
+<button onclick="keycloak.login()">
+	Login
+</button>
+						</code></pre>
+					</section>
+					<section>
+						<h2>Application Integration</h2>
+						<ul>
+							<li>Keycloak Client Adapters</li>
+							<li>OpenID Connect Resource Provider library</li>
+							<li>SAML2 Service Provider library</li>
+
+						</ul>
+					</section>
+					<section>
+						<h2>Client Adapters</h2>
+						<ul>
+							<li>JBoss EAP & WildFly</li>
+							<li>JBoss Fuse</li>
+							<li>JBoss BRMS</li>
+							<li>JavaScript</li>
+							<li>NodeJS</li>
+							<li>Mobile (Apache Cordova and Native)</li>
+							<li>Spring</li>
+							<li>Tomcat, Jetty</li>
+							<li>More coming (contributions welcome!)</li>
+						</ul>
+					</section>
+					<section>
+						<h2>Admin Console</h2>
+						<ul>
+							<li>Configure and manage everything from one console</li>
+							<li>Including settings, applications, services, users, permissions and sessions</li>
+						</ul>
+					</section>
+					<section>
+						<h2>Account Management</h2>
+						<ul>
+							<li>A console for users to manage their own accounts</li>
+						</ul>
+					</section>
+					<section>
+						<h2>Single Sign On</h2>
+						<ul>
+							<li>Web SSO</li>
+							<li>Enterprise/Desktop SSO Bridge (Kerberos)</li>
+							<li>Single Sign Out</li>
+							<li>Remote Sign Out</li>
+						</ul>
+					</section>
+					<section>
+						<h2>Themes</h2>
+						<ul>
+							<li>Brand login pages and account management to integrate with your corporate brand</li>
+							<li>HTML templates for more than just styling</li>
+						</ul>
+					</section>
+					<section>
+						<h2>Login Flows</h2>
+						<ul>
+							<li>Required actions</li>
+							<li>Recover password</li>
+							<li>Two factor authentication</li>
+							<li>Registration</li>
+						</ul>
+					</section>
+					<section>
+						<h2>Password Policies</h2>
+						<ul>
+							<li>Set required complexity for passwords</li>
+							<li>Prevent reuse of old passwords</li>
+							<li>Require regular updating of passwords</li>
+							<li>Set hashing intervals</li>
+						</ul>
+					</section>
+					<section>
+						<h2>User Federation</h2>
+						<ul>
+							<li>Sync users with external directories</li>
+							<li>Read-only or read-write</li>
+							<img src="kc-user-federation.png" border="0" alt="user federation" title="user federation" rel="nofollow"/>
+						</ul>
+					</section>
+					<section>
+						<h2>Identity Brokering</h2>
+						<ul>
+							<li>Allow external users to sign on</li>
+							<li>Supports sign on with social networks</li>
+							<img src="identity_broker_flow.png" border="0" alt="identity brokering" title="identity brokering" rel="nofollow"/>
+
+						</ul>
+					</section>
+                </section>
+				<section>
+					<h2>Try Keycloak</h2>
+					<p style="text-align: left;">Download at <a href="http://keycloak.jboss.org/keycloak/downloads">http://keycloak.jboss.org/keycloak/downloads</a></p>
+					<p style="text-align: left;">Documentation: <a href="http://keycloak.jboss.org/docs">http://keycloak.jboss.org/docs</a></p>
+					<p style="text-align: left;">OpenShift: <pre><code class="bash" data-trim>
+rhc app create &lt;APP_NAME&gt;
+   http://cartreflect-claytondev.rhcloud.com/github/keycloak/openshift-keycloak-cartridge
+				</code></pre></p>
+				</section>
+
+				<section>
+					<h1>THE END</h1>
+                    <h2>Questions ?</h2>
+				</section>
+
+			</div>
+
+		</div>
+
+		<script src="lib/js/head.min.js"></script>
+		<script src="js/reveal.js"></script>
+
+		<script>
+
+			// Full list of configuration options available at:
+			// https://github.com/hakimel/reveal.js#configuration
+			Reveal.initialize({
+				controls: true,
+				progress: true,
+				history: true,
+				center: false,
+                mouseWheel: true,
+
+				transition: 'slide', // none/fade/slide/convex/concave/zoom
+
+				// Optional reveal.js plugins
+				dependencies: [
+					{ src: 'lib/js/classList.js', condition: function() { return !document.body.classList; } },
+					{ src: 'plugin/markdown/marked.js', condition: function() { return !!document.querySelector( '[data-markdown]' ); } },
+					{ src: 'plugin/markdown/markdown.js', condition: function() { return !!document.querySelector( '[data-markdown]' ); } },
+					{ src: 'plugin/highlight/highlight.js', async: true, condition: function() { return !!document.querySelector( 'pre code' ); }, callback: function() { hljs.initHighlightingOnLoad(); } },
+					{ src: 'plugin/zoom-js/zoom.js', async: true },
+					{ src: 'plugin/notes/notes.js', async: true }
+				]
+			});
+
+		</script>
+
+	</body>
+</html>
